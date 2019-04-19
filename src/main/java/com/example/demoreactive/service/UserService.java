@@ -10,4 +10,10 @@ public interface UserService {
 	Flux<User> findAllusers();
 	
 	Mono<User> FindUserByName(String name);
+
+	Mono<User> createUser(User user);
+
+	Mono<User> updateUser(User user);
+
+	Mono<Void> deleteUserById(String id);
 }

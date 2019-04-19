@@ -1,8 +1,12 @@
 package com.example.demoreactive.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,26 +17,37 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 //@Component
-@RequestMapping("user")
+@RequestMapping(path = "user")
 @RestController
-public class UserEndPoint {
+public class UserController {
 
 	@Autowired
 	UserService userService;
 
-	@GetMapping("/all")
+	@GetMapping(path = "/all")
 	Flux<User> getAllUsers() {
-		Flux<User> users = userService.findAllusers();
-
-		return users;
+		return userService.findAllusers();
 	}
 
-	@GetMapping("/getbyname/{name}")
+	@GetMapping(path = "/getbyname/{name}")
 	Mono<User> getUserByName(@PathVariable("name") String name) {
+		return userService.FindUserByName(name);
 
-		Mono<User> user = userService.FindUserByName(name);
+	}
 
-		return user;
+	@PostMapping(path = "/create")
+	Mono<User> createUser(@RequestBody User user) {
+		return userService.createUser(user);
+	}
+
+	@PutMapping(path = "/update")
+	Mono<User> updateUser(@RequestBody User user) {
+		return userService.updateUser(user);
+	}
+
+	@DeleteMapping(path = "/delete/{id}")
+	Mono<Void> deleteUserById(@PathVariable("id") String id) {
+		return userService.deleteUserById(id);
 
 	}
 
